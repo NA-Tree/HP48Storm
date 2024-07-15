@@ -193,35 +193,41 @@ bool isConst(string input)
     return true;
 }
 
-int constantBefore(string input, int place)
+int constantBeforeLocation(string input, int place)
 {
     //this is assuming there is a constant and all subtract operators are turned into +-
-    string number;
     int i;
     int beginningOfNumber;
 
-    for(i = place; i >= 0; i--)
+    for(i = place-1; i >= 0; i--)
     {
+        // cout << endl << i << '\t' << input.at(i) << endl;
         if(isdigit(input.at(i)) || input.at(i) == '-' || input.at(i) == '.')
         {
             beginningOfNumber = i;
         }
         else
         {
-            break;
+            return beginningOfNumber;
         }
     }
 
     return beginningOfNumber;
 }
 
-int constantAfter(string input, int place)
+double constantBefore(string input, int place)
+{
+    double constant = stod(input.substr(constantBeforeLocation(input, place), place));
+    return constant;
+}
+
+int constantAfterLocation(string input, int place)
 {
     string number;
     int i;
     int endOfNumber;
 
-    for(i = place; i < input.size(); i)
+    for(i = place+1; i < input.size(); i++)
     {
 
         if(isdigit(input.at(i)) || input.at(i) == '-' || input.at(i) == '.')
@@ -230,33 +236,62 @@ int constantAfter(string input, int place)
         }
         else
         {
-            break;
+            return endOfNumber;
         }
     }
 
     return endOfNumber;
 }
 
+double constantAfter(string input, int place)
+{
+    double constant = stod(input.substr(place, constantAfterLocation(input, place)));
+    return constant;
+}
+
+string subToAddNeg(string input)
+{
+    string evaluation = input;
+    int i = 0;
+    if(evaluation.at(0) == '+')
+    {
+        evaluation = expressionInject(evaluation, 0, 0, "");
+    }
+    if(evaluation.at(evaluation.size()-1) == '+' || evaluation.at(evaluation.size()-1) == '-')
+    {
+        evaluation = expressionInject(evaluation, evaluation.size()-1, evaluation.size()-1, "");
+    }
+
+    for(i = 1; i < evaluation.size()-1; i++)
+    {
+        if(isdigit(evaluation.at(i-1)) && evaluation.at(i) == '-' && (isdigit(evaluation.at(i+1)) || 
+                                                                                evaluation.at(i+1) == '.'))
+        {
+            evaluation = expressionInject(evaluation, i, i, "+-");
+
+        }
+    }
+
+    return evaluation;
+}
+
 string addEval(string input)
 {
     string evaluation = "";
-    int i = 0;
-    double result = 0;
 
-    if(input.at(0) == '+')
-    {
-        evaluation = expressionInject(input, 0, 0, "");
-    }
+    return evaluation;
+}
 
-    for(i = 0; i < input.size(); i++)
-    {
-        if(input.at(i) == '+' && isdigit(i-1) && (isdigit(i+1) || input.at(i+1) == '-'))
-        {
-            result = sum(stod(input.substr(constantBefore(input, i), i)), stod(input.substr(i, constantAfter(input, i))));
-            evaluation = expressionInject(input, constantBefore(input, i), constantAfter(input, i), to_string(result));
-            i = 0;
-        }
-    }
+string multAndDivEval(string input)
+{
+    string evaluation;
+
+    return evaluation;
+}
+
+string powerEval(string input)
+{
+    string evaluation;
 
     return evaluation;
 }
@@ -265,21 +300,8 @@ string primOpEval(string input)
 {
     string evaluation;
     //search for all power symbols
-    //search for all 
-
-    return evaluation;
-}
-
-string subToAddNeg(string input)
-{
-    string evaluation;
-
-    return evaluation;
-}
-
-string multAndDivEval(string input)
-{
-    string evaluation;
+    //search for all multiply and divide
+    //search for all addition
 
     return evaluation;
 }

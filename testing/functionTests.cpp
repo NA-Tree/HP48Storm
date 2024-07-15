@@ -147,22 +147,81 @@ int main( int argc, char* argv[])
     }
 
     c = 0; 
+    cout << endl << "constantBeforeLocation" << endl;
+
+    { //grouping
+        test(constantBeforeLocation("0123+567890", 3) == 0, c);
+        test(constantBeforeLocation("0123+567890", 6) == 5, c);
+        test(constantBeforeLocation(".123+567890", 4) == 0, c);
+        test(constantBeforeLocation("1.23+567890", 4) == 0, c);
+        test(constantBeforeLocation("-123+567890", 4) == 0, c);
+        test(constantBeforeLocation("-.123+567890", 5) == 0, c);
+        test(constantBeforeLocation("-1.23+567890", 5) == 0, c);
+        test(constantBeforeLocation("100+-123+567890", 8) == 4, c);
+        test(constantBeforeLocation("100+-.123+567890", 9) == 4, c);
+    }
+
+    c = 0; 
+    cout << endl << "constantAfterLocation" << endl;
+
+    { //grouping
+        test(constantAfterLocation("0123+567890", 4) == 10, c);
+        test(constantAfterLocation("0123+567890", 6) == 10, c);
+        test(constantAfterLocation("0123+.567890", 4) == 11, c);
+        test(constantAfterLocation("0123+-567890", 4) == 11, c);
+        test(constantAfterLocation("0123+-.567890", 4) == 12, c);
+        test(constantAfterLocation("0123+5.67890", 4) == 11, c);
+        test(constantAfterLocation("0123+-5.678+590", 4) == 10, c);
+        test(constantAfterLocation("0123+5678+90", 4) == 8, c);
+        test(constantAfterLocation("0123+-56.0+7890", 4) == 9, c);
+    }    
+    
+    c = 0; 
     cout << endl << "constantBefore" << endl;
 
     { //grouping
-        test(constantBefore("123+567890", 4) == 0, c);
-
+        test(constantBefore("123+567890", 3) == 123, c);
+        test(constantBefore("0123+567890", 10) == 567890, c);
+        test(constantBefore(".123+567890", 4) == .123, c);
+        test(constantBefore("1.23+567890", 4) == 1.23, c);
+        test(constantBefore("-123+567890", 4) == -123, c);
+        test(constantBefore("-.123+567890", 5) == -.123, c);
+        test(constantBefore("-1.23+567890", 5) == -1.23, c);
+        test(constantBefore("100+-123+567890", 8) == -123, c);
+        test(constantBefore("100+-.123+567890", 9) == -.123, c);
     }
 
     c = 0; 
     cout << endl << "constantAfter" << endl;
 
     { //grouping
-        test(constantBefore("123+567890", 4) == 10, c);
-
+        test(constantAfterLocation("0123+567890", 4) == 10, c);
+        test(constantAfterLocation("0123+567890", 6) == 10, c);
+        test(constantAfterLocation("0123+.567890", 4) == 11, c);
+        test(constantAfterLocation("0123+-567890", 4) == 11, c);
+        test(constantAfterLocation("0123+-.567890", 4) == 12, c);
+        test(constantAfterLocation("0123+5.67890", 4) == 11, c);
+        test(constantAfterLocation("0123+-5.678+590", 4) == 10, c);
+        test(constantAfterLocation("0123+5678+90", 4) == 8, c);
+        test(constantAfterLocation("0123+-56.0+7890", 4) == 9, c);
     }
 
+    c = 0; 
+    cout << endl << "subToAddNeg" << endl;
 
+    { //grouping
+        test(subToAddNeg("0123+567890") == "0123+567890", c);
+        test(subToAddNeg("0123-567890") == "0123+-567890", c);
+        test(subToAddNeg("0123+.567890") == "0123+.567890", c);
+        test(subToAddNeg("0123-.567890") == "0123+-.567890", c);
+        test(subToAddNeg("0123+-567890") == "0123+-567890", c);
+        test(subToAddNeg("+23+567890") == "23+567890", c);
+        test(subToAddNeg("0123+56-678-90") == "0123+56+-678+-90", c);
+        test(subToAddNeg("+.123+.567-.890") == ".123+.567+-.890", c);
+        test(subToAddNeg("01-2/3.58-45.6*78/90") == "01+-2/3.58+-45.6*78/90", c);
+        test(subToAddNeg("0123+567890+") == "0123+567890", c);
+        test(subToAddNeg("0123+567890-") == "0123+567890", c);
+    }
 
 
 
