@@ -189,21 +189,22 @@ int main( int argc, char* argv[])
         test(constantBefore("-1.23+567890", 5) == -1.23, c);
         test(constantBefore("100+-123+567890", 8) == -123, c);
         test(constantBefore("100+-.123+567890", 9) == -.123, c);
+        test(constantBefore(".5+.5", 2) == .5, c);
     }
 
     c = 0; 
     cout << endl << "constantAfter" << endl;
 
     { //grouping
-        test(constantAfterLocation("0123+567890", 4) == 10, c);
-        test(constantAfterLocation("0123+567890", 6) == 10, c);
-        test(constantAfterLocation("0123+.567890", 4) == 11, c);
-        test(constantAfterLocation("0123+-567890", 4) == 11, c);
-        test(constantAfterLocation("0123+-.567890", 4) == 12, c);
-        test(constantAfterLocation("0123+5.67890", 4) == 11, c);
-        test(constantAfterLocation("0123+-5.678+590", 4) == 10, c);
-        test(constantAfterLocation("0123+5678+90", 4) == 8, c);
-        test(constantAfterLocation("0123+-56.0+7890", 4) == 9, c);
+        test(constantAfter("0123+567890", 4) == 567890, c);
+        test(constantAfter("0123+.567890", 4) == .567890, c);
+        test(constantAfter("0123+-567890", 4) == -567890, c);
+        test(constantAfter("0123+-.567890", 4) == -.567890, c);
+        test(constantAfter("0123+5.67890", 4) == 5.67890, c);
+        test(constantAfter("0123+-5.678+590", 4) == -5.678, c);
+        test(constantAfter("0123+5678+90", 4) == 5678, c);
+        test(constantAfter("0123+-56.0+7890", 4) == -56.0, c);
+
     }
 
     c = 0; 
@@ -223,7 +224,19 @@ int main( int argc, char* argv[])
         test(subToAddNeg("0123+567890-") == "0123+567890", c);
     }
 
+    c = 0; 
+    cout << endl << "addEval" << endl;
 
+    { //grouping
+        test(addEval("0123+567890") == "568013.000000", c);
+        test(addEval("10-5") == "5.000000", c);
+        test(addEval(".5+.5") == "1.000000", c);
+        test(addEval("-1+.5") == "-0.500000", c);
+        test(addEval("1+1+1") == "3.000000", c);
+        test(addEval("5-2-1") == "2.000000", c);
+        test(addEval("10+2-1.5-2-.25+.25-10") == "-1.500000", c);
+
+    }
 
 
 

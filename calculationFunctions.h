@@ -245,7 +245,9 @@ int constantAfterLocation(string input, int place)
 
 double constantAfter(string input, int place)
 {
-    double constant = stod(input.substr(place, constantAfterLocation(input, place)));
+    string substr = input.substr(place+1, constantAfterLocation(input, place));
+    substr = substr.append(1u, '\0');
+    double constant = stod(substr);
     return constant;
 }
 
@@ -282,12 +284,14 @@ string addEval(string input)
 
     evaluation = subToAddNeg(input);
 
-    for(i = 0; i < input.size(); i++)
+    for(i = 0; i < evaluation.size(); i++)
     {
-        if(input.at(i) == '+')
+        if(evaluation.at(i) == '+')
         {
-            evaluation = expressionInject(evaluation, 0, evaluation.size()-1, 
+            evaluation = expressionInject(evaluation, 0, constantAfterLocation(evaluation, i), 
             to_string(sum(constantBefore(evaluation, i), constantAfter(evaluation, i))));
+
+            i = 0;
         }
     }
 
