@@ -286,7 +286,8 @@ string addEval(string input)
     {
         if(input.at(i) == '+')
         {
-            evaluation = expressionInject(evaluation, i, i, to_string(sum(constantBefore(evaluation, i), constantAfter(evaluation, i))));
+            evaluation = expressionInject(evaluation, 0, evaluation.size()-1, 
+            to_string(sum(constantBefore(evaluation, i), constantAfter(evaluation, i))));
         }
     }
 
