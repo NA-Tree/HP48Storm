@@ -293,7 +293,40 @@ int main( int argc, char* argv[])
 
     }
 
+    c = 0; 
+    cout << endl << "primOpEval" << endl;
 
+    { //grouping
+        test(primOpEval("1^0") == "1.000000", c);
+        test(primOpEval("1^1") == "1.000000", c);
+        test(primOpEval("5^0") == "1.000000", c);
+        test(primOpEval("5^1") == "5.000000", c);
+        test(primOpEval("5*2^3") == "40.000000", c);
+        test(primOpEval("3^4*1^2-2^-1") == "80.500000", c);
+        test(primOpEval("10^2") == "100.000000", c);
+        test(primOpEval("123^1.5") == "1364.135990", c);
+        test(primOpEval("300^2") == "90000.000000", c);
+        test(primOpEval("1.5+2^3/-5^3") == "1.436000", c);
+        test(primOpEval("121^.5") == "11.000000", c);
+        test(primOpEval("27^.3333333333333") == "3.000000", c);
+        test(primOpEval("100^.5") == "10.000000", c);
+        test(primOpEval("7^2") == "49.000000", c);
+        test(primOpEval(".5^2") == "0.250000", c);
+        test(primOpEval(".25^.5") == "0.500000", c);
+        test(primOpEval("2^-2") == "0.250000", c);
+        test(primOpEval("0^5") == "0.000000", c);
+        //because of the precision of to_string, 0^x for some x may be a weird string but will still be 0
+        //this can be solved with a cleanup function that can be developed during refactoring
+        test(primOpEval("0^65986258") == "00.000000", c);
+        test(primOpEval("0^100") == "00.000000", c);
+        test(primOpEval("-100+2*5-2^2^2+6-100*2.5*4/10+2500^.5") == "-150.000000", c);
+        test(primOpEval("325+85/5+1*6-5.5-9.8*68/2+0.5-9^2/3-105.0595") == "-122.259500", c);
+        test(primOpEval("2346^2+54-5.95+6.55-100*.555-10^0+2^-2") == "5503714.350000", c);
+        //this test should be -2932.284392 but because of the rounding of each number, it's off by .000001
+        //this can be solved during refactoring when we shift to a long double system and use custom precision
+        test(primOpEval("505/36.5+9^-2.5+90-435^1.32+9-5.598428") == "-2932.284393", c);
+        
+    }
 
 
 

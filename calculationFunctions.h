@@ -351,8 +351,11 @@ string primOpEval(string input)
 {
     string evaluation = input;
     //search for all power symbols
+    evaluation = powerEval(evaluation);
     //search for all multiply and divide
+    evaluation = multAndDivEval(evaluation);
     //search for all addition
+    evaluation = addEval(evaluation);
 
     return evaluation;
 }
