@@ -277,28 +277,39 @@ string subToAddNeg(string input)
 
 string addEval(string input)
 {
-    string evaluation = "";
+    string evaluation = input;
+    int i;
+
+    evaluation = subToAddNeg(input);
+
+    for(i = 0; i < input.size(); i++)
+    {
+        if(input.at(i) == '+')
+        {
+            evaluation = expressionInject(evaluation, i, i, to_string(sum(constantBefore(evaluation, i), constantAfter(evaluation, i))));
+        }
+    }
 
     return evaluation;
 }
 
 string multAndDivEval(string input)
 {
-    string evaluation;
+    string evaluation = input;
 
     return evaluation;
 }
 
 string powerEval(string input)
 {
-    string evaluation;
+    string evaluation = input;
 
     return evaluation;
 }
 
 string primOpEval(string input)
 {
-    string evaluation;
+    string evaluation = input;
     //search for all power symbols
     //search for all multiply and divide
     //search for all addition
