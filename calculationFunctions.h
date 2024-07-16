@@ -40,11 +40,6 @@ double sum(double input1, double input2)
     return input1 + input2;
 }
 
-double difference(double input1, double input2)
-{
-    return input1 - input2;
-}
-
 double product(double input1, double input2)
 {
     return input1 * input2;
@@ -288,9 +283,8 @@ string addEval(string input)
     {
         if(evaluation.at(i) == '+')
         {
-            evaluation = expressionInject(evaluation, 0, constantAfterLocation(evaluation, i), 
+            evaluation = expressionInject(evaluation, constantBeforeLocation(evaluation, i), constantAfterLocation(evaluation, i), 
             to_string(sum(constantBefore(evaluation, i), constantAfter(evaluation, i))));
-
             i = 0;
         }
     }
@@ -301,6 +295,25 @@ string addEval(string input)
 string multAndDivEval(string input)
 {
     string evaluation = input;
+    int i;
+
+    evaluation = subToAddNeg(input);
+
+    for(i = 0; i < evaluation.size(); i++)
+    {
+        if(evaluation.at(i) == '*')
+        {
+            evaluation = expressionInject(evaluation, constantBeforeLocation(evaluation, i), constantAfterLocation(evaluation, i), 
+            to_string(product(constantBefore(evaluation, i), constantAfter(evaluation, i))));
+            i = 0;
+        }
+        else if(evaluation.at(i) == '/')
+        {
+            evaluation = expressionInject(evaluation, constantBeforeLocation(evaluation, i), constantAfterLocation(evaluation, i), 
+            to_string(division(constantBefore(evaluation, i), constantAfter(evaluation, i))));
+            i = 0;
+        }
+    }
 
     return evaluation;
 }
@@ -308,6 +321,28 @@ string multAndDivEval(string input)
 string powerEval(string input)
 {
     string evaluation = input;
+    int i;
+
+    evaluation = subToAddNeg(input);
+
+    for(i = 0; i < evaluation.size(); i++)
+    {
+        if(evaluation.at(i) == '^')
+        {
+            if(constantBefore(evaluation, i) > 0)
+            {
+            evaluation = expressionInject(evaluation, constantBeforeLocation(evaluation, i), constantAfterLocation(evaluation, i), 
+            to_string(pow(constantBefore(evaluation, i), constantAfter(evaluation, i))));
+            }
+            else 
+            {
+            evaluation = expressionInject(evaluation, constantBeforeLocation(evaluation, i)+1, constantAfterLocation(evaluation, i), 
+            to_string(pow(constantBefore(evaluation, i)*(-1), constantAfter(evaluation, i))));
+            }
+
+            i = 0;
+        }
+    }
 
     return evaluation;
 }
