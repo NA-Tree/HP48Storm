@@ -10,6 +10,7 @@ using namespace std;
 
 #define E 2.71828182845904523536028747135266249775724709369995
 #define PI 4 * atan(1)
+#define EPSILON 0.000000000000001
 
 
 /* Modes */
@@ -188,7 +189,10 @@ bool isConst(string input)
     return true;
 }
 
-int constantBeforeLocation(string input, int place)
+// prevConstStrtLoc
+// nextConstEndLoc
+
+int prevConstStrtLoc(string input, int place)
 {
     //this is assuming there is a constant and all subtract operators are turned into +-
     int i;
@@ -212,11 +216,11 @@ int constantBeforeLocation(string input, int place)
 
 long double constantBefore(string input, int place)
 {
-    long double constant = stod(input.substr(constantBeforeLocation(input, place), place));
+    long double constant = stold(input.substr(prevConstStrtLoc(input, place), place));
     return constant;
 }
 
-int constantAfterLocation(string input, int place)
+int prevConstEndLoc(string input, int place)
 {
     string number;
     int i;
@@ -240,9 +244,9 @@ int constantAfterLocation(string input, int place)
 
 long double constantAfter(string input, int place)
 {
-    string substr = input.substr(place+1, constantAfterLocation(input, place));
+    string substr = input.substr(place+1, prevConstEndLoc(input, place));
     substr = substr.append(1u, '\0');
-    long double constant = stod(substr);
+    long double constant = stold(substr);
     return constant;
 }
 
@@ -283,7 +287,7 @@ string addEval(string input)
     {
         if(evaluation.at(i) == '+')
         {
-            evaluation = expressionInject(evaluation, constantBeforeLocation(evaluation, i), constantAfterLocation(evaluation, i), 
+            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i), prevConstEndLoc(evaluation, i), 
             to_string(sum(constantBefore(evaluation, i), constantAfter(evaluation, i))));
             i = 0;
         }
@@ -303,13 +307,13 @@ string multAndDivEval(string input)
     {
         if(evaluation.at(i) == '*')
         {
-            evaluation = expressionInject(evaluation, constantBeforeLocation(evaluation, i), constantAfterLocation(evaluation, i), 
+            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i), prevConstEndLoc(evaluation, i), 
             to_string(product(constantBefore(evaluation, i), constantAfter(evaluation, i))));
             i = 0;
         }
         else if(evaluation.at(i) == '/')
         {
-            evaluation = expressionInject(evaluation, constantBeforeLocation(evaluation, i), constantAfterLocation(evaluation, i), 
+            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i), prevConstEndLoc(evaluation, i), 
             to_string(division(constantBefore(evaluation, i), constantAfter(evaluation, i))));
             i = 0;
         }
@@ -331,12 +335,12 @@ string powerEval(string input)
         {
             if(constantBefore(evaluation, i) > 0)
             {
-            evaluation = expressionInject(evaluation, constantBeforeLocation(evaluation, i), constantAfterLocation(evaluation, i), 
+            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i), prevConstEndLoc(evaluation, i), 
             to_string(pow(constantBefore(evaluation, i), constantAfter(evaluation, i))));
             }
             else 
             {
-            evaluation = expressionInject(evaluation, constantBeforeLocation(evaluation, i)+1, constantAfterLocation(evaluation, i), 
+            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i)+1, prevConstEndLoc(evaluation, i), 
             to_string(pow(constantBefore(evaluation, i)*(-1), constantAfter(evaluation, i))));
             }
 
@@ -395,63 +399,63 @@ string evaluate(string str2eval)
                     else if(input.substr(currentExpressionStart-4, currentExpressionStart-1)  
                        == "ATAN")
                        {
-                            injectionLongDouble = stod(tempStr);
+                            injectionLongDouble = stold(tempStr);
                             tempStr = to_string(atan(injectionLongDouble));
                             expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
                        }
                     else if(input.substr(currentExpressionStart-4, currentExpressionStart-1)  
                        == "ACOS")
                        {
-                            injectionLongDouble = stod(tempStr);
+                            injectionLongDouble = stold(tempStr);
                             tempStr = to_string(acos(injectionLongDouble));
                             expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
                        }
                     else if(input.substr(currentExpressionStart-4, currentExpressionStart-1)  
                        == "ASIN")
                        {
-                            injectionLongDouble = stod(tempStr);
+                            injectionLongDouble = stold(tempStr);
                             tempStr = to_string(asin(injectionLongDouble));
                             expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
                        }
                     else if(input.substr(currentExpressionStart-3, currentExpressionStart-1)  
                        == "TAN")
                        {
-                            injectionLongDouble = stod(tempStr);
+                            injectionLongDouble = stold(tempStr);
                             tempStr = to_string(tan(injectionLongDouble));
                             expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
                        }
                     else if(input.substr(currentExpressionStart-3, currentExpressionStart-1)  
                        == "COS")
                        {
-                            injectionLongDouble = stod(tempStr);
+                            injectionLongDouble = stold(tempStr);
                             tempStr = to_string(cos(injectionLongDouble));
                             expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
                        }
                     else if(input.substr(currentExpressionStart-3, currentExpressionStart-1)  
                        == "SIN")
                        {
-                            injectionLongDouble = stod(tempStr);
+                            injectionLongDouble = stold(tempStr);
                             tempStr = to_string(sin(injectionLongDouble));
                             expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
                        }
                     else if(input.substr(currentExpressionStart-3, currentExpressionStart-1)  
                        == "EXP")
                        {
-                            injectionLongDouble = stod(tempStr);
+                            injectionLongDouble = stold(tempStr);
                             tempStr = to_string(exp(injectionLongDouble));
                             expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
                        }
                     else if(input.substr(currentExpressionStart-3, currentExpressionStart-1)  
                        == "LOG")
                        {
-                            injectionLongDouble = stod(tempStr);
+                            injectionLongDouble = stold(tempStr);
                             tempStr = to_string(logBase(10, injectionLongDouble));
                             expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
                        }
                     else if(input.substr(currentExpressionStart-2, currentExpressionStart-1)  
                        == "LN")
                        {
-                            injectionLongDouble = stod(tempStr);
+                            injectionLongDouble = stold(tempStr);
                             tempStr = to_string(logBase(E, injectionLongDouble));
                             expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
                        }
