@@ -140,36 +140,38 @@ int main( int argc, char* argv[])
     //     test(isConst("-902183518.08008005") == true, c);
     //     test(isConst("8099.02-8658") == false, c);
     //     test(isConst("-") == false, c);
+    //     test(isConst("123.6.5") == false, c);
+    //     test(isConst("-1.2.3") == false, c);
     // }
 
     // c = 0; 
-    // cout << endl << "constantBeforeLocation" << endl;
+    // cout << endl << "prevConstStrtLoc" << endl;
 
     // { //grouping
-    //     test(constantBeforeLocation("0123+567890", 3) == 0, c);
-    //     test(constantBeforeLocation("0123+567890", 6) == 5, c);
-    //     test(constantBeforeLocation(".123+567890", 4) == 0, c);
-    //     test(constantBeforeLocation("1.23+567890", 4) == 0, c);
-    //     test(constantBeforeLocation("-123+567890", 4) == 0, c);
-    //     test(constantBeforeLocation("-.123+567890", 5) == 0, c);
-    //     test(constantBeforeLocation("-1.23+567890", 5) == 0, c);
-    //     test(constantBeforeLocation("100+-123+567890", 8) == 4, c);
-    //     test(constantBeforeLocation("100+-.123+567890", 9) == 4, c);
+    //     test(prevConstStrtLoc("0123+567890", 3) == 0, c);
+    //     test(prevConstStrtLoc("0123+567890", 6) == 5, c);
+    //     test(prevConstStrtLoc(".123+567890", 4) == 0, c);
+    //     test(prevConstStrtLoc("1.23+567890", 4) == 0, c);
+    //     test(prevConstStrtLoc("-123+567890", 4) == 0, c);
+    //     test(prevConstStrtLoc("-.123+567890", 5) == 0, c);
+    //     test(prevConstStrtLoc("-1.23+567890", 5) == 0, c);
+    //     test(prevConstStrtLoc("100+-123+567890", 8) == 4, c);
+    //     test(prevConstStrtLoc("100+-.123+567890", 9) == 4, c);
     // }
 
     // c = 0; 
-    // cout << endl << "constantAfterLocation" << endl;
+    // cout << endl << "prevConstEndLoc" << endl;
 
     // { //grouping
-    //     test(constantAfterLocation("0123+567890", 4) == 10, c);
-    //     test(constantAfterLocation("0123+567890", 6) == 10, c);
-    //     test(constantAfterLocation("0123+.567890", 4) == 11, c);
-    //     test(constantAfterLocation("0123+-567890", 4) == 11, c);
-    //     test(constantAfterLocation("0123+-.567890", 4) == 12, c);
-    //     test(constantAfterLocation("0123+5.67890", 4) == 11, c);
-    //     test(constantAfterLocation("0123+-5.678+590", 4) == 10, c);
-    //     test(constantAfterLocation("0123+5678+90", 4) == 8, c);
-    //     test(constantAfterLocation("0123+-56.0+7890", 4) == 9, c);
+    //     test(prevConstEndLoc("0123+567890", 4) == 10, c);
+    //     test(prevConstEndLoc("0123+567890", 6) == 10, c);
+    //     test(prevConstEndLoc("0123+.567890", 4) == 11, c);
+    //     test(prevConstEndLoc("0123+-567890", 4) == 11, c);
+    //     test(prevConstEndLoc("0123+-.567890", 4) == 12, c);
+    //     test(prevConstEndLoc("0123+5.67890", 4) == 11, c);
+    //     test(prevConstEndLoc("0123+-5.678+590", 4) == 10, c);
+    //     test(prevConstEndLoc("0123+5678+90", 4) == 8, c);
+    //     test(prevConstEndLoc("0123+-56.0+7890", 4) == 9, c);
     // }    
     
     // c = 0; 

@@ -38,20 +38,23 @@ int baseMode = 0;
 
 long double sum(long double input1, long double input2)
 {
+    //adding the inputs and returning the result
     return input1 + input2;
 }
 
 long double product(long double input1, long double input2)
 {
+    //multiplying the two inputs and returning the result
     return input1 * input2;
 }
 
 long double division(long double input1, long double input2)
 {
     long double result = 0;
-
+    // checking for 0, if it is, then result will still be 0 upon return
     if(input2)
     {
+        //returning the division of the two inputs
         result = input1 / input2;
     }
     else
@@ -64,11 +67,13 @@ long double division(long double input1, long double input2)
 
 long double naturalExp(long double input)
 {
+    // returning the exponentiation of e^input
     return pow(E, input);
 }
 
 long double baseTenExp(long double input)
 {
+    // returning the exponentiation of 10^input
     return pow(10, input);
 }
 
@@ -76,11 +81,14 @@ long double logBase(long double base, long double input)
 {
     long double result = 0;
 
+    //checking for inputs above 0 for a real solution
+    //this function will not return complex results
     if(base > 0 && input > 0)
     {
-        result = log(input)/log(base);
+        //returns the result of log_base(input)
+        result = log(input) / log(base);
     }
-    
+
     return result;
 }
 
@@ -89,36 +97,37 @@ long double logBase(long double base, long double input)
 string removeWhiteSpace(string input)
 {
     // Creating a string containing multiple whitespaces.
-    string alteredString = input;
+    string evaluation = input;
 
     // Using the erase, remove_if, and ::isspace functions.
-    alteredString.erase(
-        remove_if(alteredString.begin(), alteredString.end(), ::isspace), 
-        alteredString.end());
+    evaluation.erase(remove_if(evaluation.begin(), evaluation.end(), ::isspace), evaluation.end());
 
-    return alteredString;
+    return evaluation;
 }
 
 // arguments: the start of the expression, the end of the expression, and the string it is to be replaced with
 string expressionInject(string inputString, int BOE, int EOE, string injection)
 {
+    // because the functions start at 1 instead of 0, we shift up by one place
     BOE++;
     EOE++;
+
     int i = 0;
     int sizeOfInj = injection.size();
-    string returnString = "";
-    returnString[0] = ' ';
+    string evaluation = "";
+    evaluation[0] = ' ';
     
-    //copy the beginning of the expression
-    returnString.append(inputString, 0, BOE-1);
+    //copy the beginning of the expression and exclude 
+    //the beginning of the expression that is to be replaced
+    evaluation.append(inputString, 0, BOE - 1);
     //copy the injection in place of the phrase
-    returnString.append(injection); // -1 so the end byte doesn't carry into the string (prematurely)
+    evaluation.append(injection);
     //copy the rest of the expression
-    returnString.append(inputString, EOE);
-    // just in case it isn't given otherwise... look into when testing
-    returnString.append("\0"); 
+    evaluation.append(inputString, EOE);
+    // add an end byte for enssurance of the string ending
+    evaluation.append("\0"); 
 
-    return returnString;
+    return evaluation;
 }
 
 //returns amount of open and closed parentheses
@@ -149,84 +158,128 @@ int countParentheses(string input)
     return amount;
 }
 
-int findPrevParenth(string inputString, int closeParenth)
+// arguments: the input string and the place of the closing parentheses 
+// that you want the place of it's matching open parentheses
+int findPrevParenth(string input, int closeParenthPlace)
 {
-    int closeLocation = closeParenth;
+    int closeLoc = closeParenthPlace;
     int i;
 
-    if(inputString.size() < closeLocation)
+    if(input.size() < closeLoc)
     {
-        closeLocation = inputString.size()-1;
+        //if the evaluation place is out of bounds, 
+        //it will evaluate with the largest in bound location
+        closeLoc = input.size()-1;
+    }
+    
+    //if closeLoc is the close parenth. the largest it can be is closLoc - 1
+    i = closeLoc - 1;
+
+    while(input.at(i) != '(' && 0 != i)
+    {  
+        i--;
     }
 
-    for(i = closeLocation - 1; inputString.at(i) != '(' && i != 0; i--)
-    {
-
-    }
     return i;
 }
 
 bool isConst(string input)
 {
+    int i = 0;
+
+    //used to check for more than one '.'
+    int decimalCounter = 0;
+
+    //an empty string is not a constant
     if(input.size() == 0)
     {
         return false;
     }
 
-    int i = 0;
+    //check each character in the string
     for(i = 0; i < input.size(); i++)
     {
+
+        //ignore the '-' at the beginnning of a negative number
         if(i == 0 && input.at(i) == '-')
         {
             i++;
         }
 
+        // checks for multiple decimal points 
+        // confirms that the character it is checking is within bounds
+        if(i < input.size() && input.at(i) == '.')
+        {
+            if(decimalCounter)
+            {
+                return false;
+            }
+            else
+            {
+                decimalCounter++;
+            }
+        }
+
+        // "i >= input.size()" would only occur if the string was literally "-"
+        // checks each character to see if it's a valid character type
         if(i >= input.size() || !isdigit(input.at(i)) && input.at(i) != '.')
         {
             return false;
         }
+
     }
+
+    //if nothing was flagged to be false, return true
     return true;
+
 }
 
-// prevConstStrtLoc
-// nextConstEndLoc
-
-int prevConstStrtLoc(string input, int place)
+//finds the position of the beginning character of the constant 
+//before the operator (which is located at operatorPlace) for string input
+int prevConstStrtLoc(string input, int operatorPlace)
 {
-    //this is assuming there is a constant and all subtract operators are turned into +-
+    // this functions assumes there are constants on both side of the operator
+    // and all '-' operators are turned into '+-'
     int i;
     int beginningOfNumber;
 
-    for(i = place-1; i >= 0; i--)
+    //goes backwards and finds the moment the string is no longer just a constant
+    for(i = operatorPlace - 1; i >= 0; i--)
     {
-        // cout << endl << i << '\t' << input.at(i) << endl;
         if(isdigit(input.at(i)) || input.at(i) == '-' || input.at(i) == '.')
         {
             beginningOfNumber = i;
         }
         else
         {
+            // returns the location of the beginning of the number early
             return beginningOfNumber;
         }
     }
 
+    // returns the location of the beginning of the number
     return beginningOfNumber;
 }
 
-long double constantBefore(string input, int place)
+//finds the constant before an operator (which is located at operatorPlace) for string input
+//retured as a long double
+long double constantBefore(string input, int operatorPlace)
 {
-    long double constant = stold(input.substr(prevConstStrtLoc(input, place), place));
+    // finds the constant a
+    long double constant = stold(input.substr(prevConstStrtLoc(input, operatorPlace), operatorPlace));
     return constant;
 }
 
-int prevConstEndLoc(string input, int place)
+//finds the position of the end character of the constant 
+//after the operator (which is located at operatorPlace) for string input
+int prevConstEndLoc(string input, int operatorPlace)
 {
     string number;
     int i;
     int endOfNumber;
 
-    for(i = place+1; i < input.size(); i++)
+    //goes through the string and finds the moment the string is no longer just a constant
+    for(i = operatorPlace + 1; i < input.size(); i++)
     {
 
         if(isdigit(input.at(i)) || input.at(i) == '-' || input.at(i) == '.')
@@ -235,44 +288,59 @@ int prevConstEndLoc(string input, int place)
         }
         else
         {
+            // returns the location of the beginning of the number early
             return endOfNumber;
         }
+
     }
 
+    // returns the location of the beginning of the number
     return endOfNumber;
 }
 
-long double constantAfter(string input, int place)
+//finds the constant before an operator (which is located at operatorPlace) for string input
+//retured as a long double
+long double constantAfter(string input, int operatorPlace)
 {
-    string substr = input.substr(place+1, prevConstEndLoc(input, place));
+    //isolates the constant in string form
+    string substr = input.substr(operatorPlace + 1, prevConstEndLoc(input, operatorPlace));
+    //appends an end byte to ensure saftey
     substr = substr.append(1u, '\0');
-    long double constant = stold(substr);
-    return constant;
+    //returns the constant after it's converted to a long double
+    return stold(substr);
 }
 
+//converts all - operators into +- (the addition of a negative)
 string subToAddNeg(string input)
 {
     string evaluation = input;
     int i = 0;
+    
+    //checks if there is a random '+' with nothing on it's left side (and corrects it)
     if(evaluation.at(0) == '+')
     {
         evaluation = expressionInject(evaluation, 0, 0, "");
     }
+
+    //checks if there is a random '+' or '-' with nothing on it's right side (and corrects it)
     if(evaluation.at(evaluation.size()-1) == '+' || evaluation.at(evaluation.size()-1) == '-')
     {
         evaluation = expressionInject(evaluation, evaluation.size()-1, evaluation.size()-1, "");
     }
 
-    for(i = 1; i < evaluation.size()-1; i++)
+    //looks at each character and looks to see if it's a minus operator
+    //with characters indicative of constants on both sides
+    for(i = 1; i < evaluation.size() - 1; i++)
     {
-        if(isdigit(evaluation.at(i-1)) && evaluation.at(i) == '-' && (isdigit(evaluation.at(i+1)) || 
-                                                                                evaluation.at(i+1) == '.'))
+        if(isdigit(evaluation.at(i - 1)) && evaluation.at(i) == '-' && (isdigit(evaluation.at(i+1)) || 
+                                                                        evaluation.at(i+1) == '.'))
         {
+            // replaces the '-' character with "+-"
             evaluation = expressionInject(evaluation, i, i, "+-");
-
         }
     }
 
+    //returns the original expressions with the corrections made
     return evaluation;
 }
 
@@ -492,8 +560,8 @@ string evaluate(string str2eval)
 
     //symbols and the way things look in the calculator (and thus the final product) 
     //will have it's own translations only at the display level
-    string returnString = "";
-    return returnString;
+    string evaluation = "";
+    return evaluation;
 }
 
 
