@@ -11,6 +11,7 @@ using namespace std;
 
 #define E 2.71828182845904523536028747135266249775724709369995
 #define PI 4 * atan(1)
+
 #define EPSILON 0.000000000000001
 #define DECPRECISION 15
 
@@ -185,6 +186,7 @@ int findPrevParenth(string input, int closeParenthPlace)
     return i;
 }
 
+//TODO: make sure you also check for universal constants
 bool isConst(string input)
 {
     int i = 0;
@@ -448,107 +450,113 @@ string primOpEval(string input)
     return evaluation;
 }
 
-string evaluate(string str2eval)
+string evaluate(string input)
 {
-    string input = str2eval;
+    string evaluation = input;
     int i;
-    int currentExpressionStart = 0;
-    int currentExpressionEnd = 0;
+    int currentBOE = 0;
+    int currentEOE = 0;
     string tempStr;
-    long double injectionLongDouble;
-    // int ammountOfOperators = 0;
+    long double injectionNum;
 
     //if there are no parentheses in the expression
-    if(countParentheses(input) == 0 || 
-      (countParentheses(input) == 1 && 
-       input.at(0) == '(' && 
-       input.at(input.size()-1) == ')'))
+    if(countParentheses(evaluation) == 0 || 
+      (countParentheses(evaluation) == 1 && 
+       evaluation.at(0) == '(' && 
+       evaluation.at(evaluation.size()-1) == ')'))
     {
-
+        return primOpEval(input);
     }
     else
     {
-        for(i = 0; i < input.size(); i++)
+        //find the lowest level of parentheses
+        for(i = 0; i < evaluation.size(); i++)
         {
-            if(input.at(i) == ')')
+            if(evaluation.at(i) == ')')
             {
-                currentExpressionStart = findPrevParenth(input, i);
-                currentExpressionEnd = i;
-                tempStr = input.substr(currentExpressionStart+1, currentExpressionEnd-1);
+                //isolating the expression of the contents within parentheses
+                currentBOE = findPrevParenth(evaluation, i);
+                currentEOE = i;
+                tempStr = evaluation.substr(currentBOE + 1, currentEOE - 1);
+                //checking if it's a constant
                 if(isConst(tempStr))
                 {
-                    if(!isalpha(input.at(currentExpressionStart-1)))
+                    // if there is no letter before the parentheses, no need to check for a named function
+                    if(!isalpha(evaluation.at(currentBOE - 1)))
                     {
                     }
-                    else if(input.substr(currentExpressionStart-4, currentExpressionStart-1)  
+                    // if there is a letter before the parentheses, proceed with evaluation
+                    else if(evaluation.substr(currentBOE - 4, currentBOE - 1)  
                        == "ATAN")
                        {
-                            injectionLongDouble = stold(tempStr);
-                            tempStr = toString(atan(injectionLongDouble));
-                            expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
+                            injectionNum = stold(tempStr);
+                            tempStr = toString(atan(injectionNum));
+                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
                        }
-                    else if(input.substr(currentExpressionStart-4, currentExpressionStart-1)  
+                    else if(evaluation.substr(currentBOE - 4, currentBOE - 1)  
                        == "ACOS")
                        {
-                            injectionLongDouble = stold(tempStr);
-                            tempStr = toString(acos(injectionLongDouble));
-                            expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
+                            injectionNum = stold(tempStr);
+                            tempStr = toString(acos(injectionNum));
+                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
                        }
-                    else if(input.substr(currentExpressionStart-4, currentExpressionStart-1)  
+                    else if(evaluation.substr(currentBOE - 4, currentBOE - 1)  
                        == "ASIN")
                        {
-                            injectionLongDouble = stold(tempStr);
-                            tempStr = toString(asin(injectionLongDouble));
-                            expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
+                            injectionNum = stold(tempStr);
+                            tempStr = toString(asin(injectionNum));
+                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
                        }
-                    else if(input.substr(currentExpressionStart-3, currentExpressionStart-1)  
+                    else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
                        == "TAN")
                        {
-                            injectionLongDouble = stold(tempStr);
-                            tempStr = toString(tan(injectionLongDouble));
-                            expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
+                            injectionNum = stold(tempStr);
+                            tempStr = toString(tan(injectionNum));
+                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
                        }
-                    else if(input.substr(currentExpressionStart-3, currentExpressionStart-1)  
+                    else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
                        == "COS")
                        {
-                            injectionLongDouble = stold(tempStr);
-                            tempStr = toString(cos(injectionLongDouble));
-                            expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
+                            injectionNum = stold(tempStr);
+                            tempStr = toString(cos(injectionNum));
+                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
                        }
-                    else if(input.substr(currentExpressionStart-3, currentExpressionStart-1)  
+                    else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
                        == "SIN")
                        {
-                            injectionLongDouble = stold(tempStr);
-                            tempStr = toString(sin(injectionLongDouble));
-                            expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
+                            injectionNum = stold(tempStr);
+                            tempStr = toString(sin(injectionNum));
+                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
                        }
-                    else if(input.substr(currentExpressionStart-3, currentExpressionStart-1)  
+                    else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
                        == "EXP")
                        {
-                            injectionLongDouble = stold(tempStr);
-                            tempStr = toString(exp(injectionLongDouble));
-                            expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
+                            injectionNum = stold(tempStr);
+                            tempStr = toString(exp(injectionNum));
+                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
                        }
-                    else if(input.substr(currentExpressionStart-3, currentExpressionStart-1)  
+                    else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
                        == "LOG")
                        {
-                            injectionLongDouble = stold(tempStr);
-                            tempStr = toString(logBase(10, injectionLongDouble));
-                            expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
+                            injectionNum = stold(tempStr);
+                            tempStr = toString(logBase(10, injectionNum));
+                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
                        }
-                    else if(input.substr(currentExpressionStart-2, currentExpressionStart-1)  
+                    else if(evaluation.substr(currentBOE - 2, currentBOE - 1)  
                        == "LN")
                        {
-                            injectionLongDouble = stold(tempStr);
-                            tempStr = toString(logBase(E, injectionLongDouble));
-                            expressionInject(input, currentExpressionStart, currentExpressionEnd, tempStr);
+                            injectionNum = stold(tempStr);
+                            tempStr = toString(logBase(E, injectionNum));
+                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
                        }
+                       //make the process start over for long chains
+                       i = 0;
                 }
                 else
                 {
                     //inject the parenteses with the evaluation of the internals
-                    expressionInject(input, currentExpressionStart, currentExpressionEnd, 
-                    evaluate(input.substr(currentExpressionStart, currentExpressionEnd)));
+                    expressionInject(evaluation, currentBOE, currentEOE, 
+                    evaluate(evaluation.substr(currentBOE, currentEOE)));
                 }
             }
         }
@@ -576,7 +584,7 @@ string evaluate(string str2eval)
 
     //symbols and the way things look in the calculator (and thus the final product) 
     //will have it's own translations only at the display level
-    string evaluation = "";
+
     return evaluation;
 }
 
