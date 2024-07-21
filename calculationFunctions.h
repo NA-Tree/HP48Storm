@@ -450,6 +450,80 @@ string primOpEval(string input)
     return evaluation;
 }
 
+// rounds a string constant
+string round(string input)
+{
+    string evaluation = "";
+    string tempStr;
+    int tempConst;
+    int i;
+
+    //only continue if the input is a constant
+    if(isConst(input))
+    {
+        evaluation = input;
+
+        //finding the end of the trailing zeros
+        i = evaluation.size() - 1;
+        while(evaluation.at(i) == '0' && i > 0)
+        {
+            i--;
+        }
+
+        //if the number ends in '.' then remove it as well
+        if(evaluation.at(i) == '.')
+        {
+            // remove all of the junk that was after the i
+            evaluation = evaluation.substr(0, i);
+        }
+        else
+        {
+            //remove all of the junk that was after the i
+            evaluation = evaluation.substr(0, i + 1);
+        }
+
+    
+        // //rounding up if there are 9s for all but the last 2 digits
+        // i = evaluation.size() - 1;
+        // while(evaluation.at(i) == '9' && i >= 0)
+        // {
+        //     i--;
+        // }
+
+        // //get the incremented value 
+        // tempStr = evaluation.at(i);
+        // tempConst = stoi(tempStr) + 1;
+
+        // //if the 9s begin with a '.' add the next value
+        // if(evaluation.at(i - 1) == '.')
+        // {
+        //     //skip over the '.'
+        //     i--;
+
+
+        //     //increment the next value
+        //     evaluation = expressionInject(evaluation, i, i, to_string(tempConst));
+        // }
+        // //if there are at least 4 straight 9s, the next value increment
+        // else if(i <= evaluation.size() - 1 - 4)
+        // {
+        //     //increment the next value
+        //     evaluation = expressionInject(evaluation, i, i, to_string(tempConst));
+        // }
+
+
+
+
+
+
+    }
+
+    return evaluation;
+}
+
+
+
+
 string evaluate(string input)
 {
     string evaluation = input;

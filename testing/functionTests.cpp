@@ -225,68 +225,67 @@ int main( int argc, char* argv[])
     // cout << endl << "addEval" << endl;
 
     // { //grouping
-    //     test(addEval("0123+567890") == "568013.000000", c);
-    //     test(addEval("10-5") == "5.000000", c);
-    //     test(addEval(".5+.5") == "1.000000", c);
-    //     test(addEval("-1+.5") == "-0.500000", c);
-    //     test(addEval("1+1+1") == "3.000000", c);
-    //     test(addEval("5-2-1") == "2.000000", c);
-    //     test(addEval("10+2-1.5-2-.25+.25-10") == "-1.500000", c);
-
+    //     test(addEval("0123+567890") == "568013.000000000000000", c);
+    //     test(addEval("10-5") == "5.000000000000000", c);
+    //     test(addEval(".5+.5") == "1.000000000000000", c);
+    //     test(addEval("-1+.5") == "-0.500000000000000", c);
+    //     test(addEval("1+1+1") == "3.000000000000000", c);
+    //     test(addEval("5-2-1") == "2.000000000000000", c);
+    //     test(addEval("10+2-1.5-2-.25+.25-10") == "-1.500000000000000", c);
     // }
 
     // c = 0; 
     // cout << endl << "multAndDivEval" << endl;
 
     // { //grouping
-    //     test(multAndDivEval(".5*2") == "1.000000", c);
-    //     test(multAndDivEval("5*2") == "10.000000", c);
-    //     test(multAndDivEval("12*5") == "60.000000", c);
-    //     test(multAndDivEval("1*1") == "1.000000", c);
-    //     test(multAndDivEval("2*2") == "4.000000", c);
-    //     test(multAndDivEval("0*6") == "0.000000", c);
-    //     test(multAndDivEval("0/5") == "0.000000", c);
-    //     test(multAndDivEval("1/1") == "1.000000", c);
-    //     test(multAndDivEval("100/1") == "100.000000", c);
-    //     test(multAndDivEval(".5/2") == "0.250000", c);
-    //     test(multAndDivEval("5/.5") == "10.000000", c);
-    //     test(multAndDivEval("1/3") == "0.333333", c);
-    //     test(multAndDivEval("1*1/1") == "1.000000", c);
-    //     test(multAndDivEval("2*3/3") == "2.000000", c);
-    //     test(multAndDivEval("-1*5") == "-5.000000", c);
-    //     test(multAndDivEval("-1*2*-3*4") == "24.000000", c);
-    //     test(multAndDivEval("-1.2*2") == "-2.400000", c);
-    //     test(multAndDivEval(".5*.5*4") == "1.000000", c);
-    //     test(multAndDivEval("1-4/2") == "1+-2.000000", c);
-    //     test(multAndDivEval("1*2-4/2") == "2.000000+-2.000000", c);
-    //     test(multAndDivEval("1*2-4/2+1*1") == "2.000000+-2.000000+1.000000", c);
+    //     test(multAndDivEval(".5*2") == "1.000000000000000", c);
+    //     test(multAndDivEval("5*2") == "10.000000000000000", c);
+    //     test(multAndDivEval("12*5") == "60.000000000000000", c);
+    //     test(multAndDivEval("1*1") == "1.000000000000000", c);
+    //     test(multAndDivEval("2*2") == "4.000000000000000", c);
+    //     test(multAndDivEval("0*6") == "0.000000000000000", c);
+    //     test(multAndDivEval("0/5") == "0.000000000000000", c);
+    //     test(multAndDivEval("1/1") == "1.000000000000000", c);
+    //     test(multAndDivEval("100/1") == "100.000000000000000", c);
+    //     test(multAndDivEval(".5/2") == "0.250000000000000", c);
+    //     test(multAndDivEval("5/.5") == "10.000000000000000", c);
+    //     test(multAndDivEval("1/3") == "0.333333333333333", c);
+    //     test(multAndDivEval("1*1/1") == "1.000000000000000", c);
+    //     test(multAndDivEval("2*3/3") == "2.000000000000000", c);
+    //     test(multAndDivEval("-1*5") == "-5.000000000000000", c);
+    //     test(multAndDivEval("-1*2*-3*4") == "24.000000000000000", c);
+    //     test(multAndDivEval("-1.2*2") == "-2.400000000000000", c);
+    //     test(multAndDivEval(".5*.5*4") == "1.000000000000000", c);
+    //     test(multAndDivEval("1-4/2") == "1+-2.000000000000000", c);
+    //     test(multAndDivEval("1*2-4/2") == "2.000000000000000+-2.000000000000000", c);
+    //     test(multAndDivEval("1*2-4/2+1*1") == "2.000000000000000+-2.000000000000000+1.000000000000000", c);
     // }
 
     // c = 0; 
     // cout << endl << "powerEval" << endl;
 
     // { //grouping
-    //     test(powerEval("1^0") == "1.000000", c);
-    //     test(powerEval("1^1") == "1.000000", c);
-    //     test(powerEval("5^0") == "1.000000", c);
-    //     test(powerEval("5^1") == "5.000000", c);
-    //     test(powerEval("5*2^3") == "5*8.000000", c);
-    //     test(powerEval("3^4*1^2-2^-1") == "81.000000*1.000000+-0.500000", c);
-    //     test(powerEval("10^2") == "100.000000", c);
-    //     test(powerEval("123^1.5") == "1364.135990", c);
-    //     test(powerEval("300^2") == "90000.000000", c);
-    //     test(powerEval("1.5+2^3/-5^3") == "1.5+8.000000/-125.000000", c);
-    //     test(powerEval("121^.5") == "11.000000", c);
-    //     test(powerEval("27^.3333333333333") == "3.000000", c);
-    //     test(powerEval("100^.5") == "10.000000", c);
-    //     test(powerEval("7^2") == "49.000000", c);
-    //     test(powerEval(".5^2") == "0.250000", c);
-    //     test(powerEval(".25^.5") == "0.500000", c);
-    //     test(powerEval("2^-2") == "0.250000", c);
+    //     test(powerEval("1^0") == "1.000000000000000", c);
+    //     test(powerEval("1^1") == "1.000000000000000", c);
+    //     test(powerEval("5^0") == "1.000000000000000", c);
+    //     test(powerEval("5^1") == "5.000000000000000", c);
+    //     test(powerEval("5*2^3") == "5*8.000000000000000", c);
+    //     test(powerEval("3^4*1^2-2^-1") == "81.000000000000000*1.000000000000000+-0.500000000000000", c);
+    //     test(powerEval("10^2") == "100.000000000000000", c);
+    //     test(powerEval("123^1.5") == "1364.135990288358311", c);
+    //     test(powerEval("300^2") == "90000.000000000000000", c);
+    //     test(powerEval("1.5+2^3/-5^3") == "1.5+8.000000000000000/-125.000000000000000", c);
+    //     test(powerEval("121^.5") == "11.000000000000000", c);
+    //     test(powerEval("27^.333333333333333333333") == "3.000000000000000", c);
+    //     test(powerEval("100^.5") == "10.000000000000000", c);
+    //     test(powerEval("7^2") == "49.000000000000000", c);
+    //     test(powerEval(".5^2") == "0.250000000000000", c);
+    //     test(powerEval(".25^.5") == "0.500000000000000", c);
+    //     test(powerEval("2^-2") == "0.250000000000000", c);
     //     //because of the precision of to_string, 0^x for some x may be a weird string but will still be 0
-    //     test(powerEval("0^5") == "0-0.000000", c);
-    //     test(powerEval("0^65986258") == "00.000000", c);
-    //     test(powerEval("0^100") == "00.000000", c);
+    //     test(powerEval("0^5") == "0-0.000000000000000", c);
+    //     test(powerEval("0^65986258") == "00.000000000000000", c);
+    //     test(powerEval("0^100") == "00.000000000000000", c);
 
     // }
 
@@ -294,36 +293,80 @@ int main( int argc, char* argv[])
     // cout << endl << "primOpEval" << endl;
 
     // { //grouping
-    //     test(primOpEval("1^0") == "1.000000", c);
-    //     test(primOpEval("1^1") == "1.000000", c);
-    //     test(primOpEval("5^0") == "1.000000", c);
-    //     test(primOpEval("5^1") == "5.000000", c);
-    //     test(primOpEval("5*2^3") == "40.000000", c);
-    //     test(primOpEval("3^4*1^2-2^-1") == "80.500000", c);
-    //     test(primOpEval("10^2") == "100.000000", c);
-    //     test(primOpEval("123^1.5") == "1364.135990", c);
-    //     test(primOpEval("300^2") == "90000.000000", c);
-    //     test(primOpEval("1.5+2^3/-5^3") == "1.436000", c);
-    //     test(primOpEval("121^.5") == "11.000000", c);
-    //     test(primOpEval("27^.3333333333333") == "3.000000", c);
-    //     test(primOpEval("100^.5") == "10.000000", c);
-    //     test(primOpEval("7^2") == "49.000000", c);
-    //     test(primOpEval(".5^2") == "0.250000", c);
-    //     test(primOpEval(".25^.5") == "0.500000", c);
-    //     test(primOpEval("2^-2") == "0.250000", c);
-    //     test(primOpEval("0^5") == "0.000000", c);
+    //     test(primOpEval("1^0") == "1.000000000000000", c);
+    //     test(primOpEval("1^1") == "1.000000000000000", c);
+    //     test(primOpEval("5^0") == "1.000000000000000", c);
+    //     test(primOpEval("5^1") == "5.000000000000000", c);
+    //     test(primOpEval("5*2^3") == "40.000000000000000", c);
+    //     test(primOpEval("3^4*1^2-2^-1") == "80.500000000000000", c);
+    //     test(primOpEval("10^2") == "100.000000000000000", c);
+    //     test(primOpEval("123^1.5") == "1364.135990288358311", c);
+    //     test(primOpEval("300^2") == "90000.000000000000000", c);
+    //     test(primOpEval("1.5+2^3/-5^3") == "1.436000000000000", c);
+    //     test(primOpEval("121^.5") == "11.000000000000000", c);
+    //     test(primOpEval("27^.33333333333333333") == "3.000000000000000", c);
+    //     test(primOpEval("100^.5") == "10.000000000000000", c);
+    //     test(primOpEval("7^2") == "49.000000000000000", c);
+    //     test(primOpEval(".5^2") == "0.250000000000000", c);
+    //     test(primOpEval(".25^.5") == "0.500000000000000", c);
+    //     test(primOpEval("2^-2") == "0.250000000000000", c);
+    //     test(primOpEval("0^5") == "0.000000000000000", c);
     //     //because of the precision of to_string, 0^x for some x may be a weird string but will still be 0
     //     //this can be solved with a cleanup function that can be developed during refactoring
-    //     test(primOpEval("0^65986258") == "00.000000", c);
-    //     test(primOpEval("0^100") == "00.000000", c);
-    //     test(primOpEval("-100+2*5-2^2^2+6-100*2.5*4/10+2500^.5") == "-150.000000", c);
-    //     test(primOpEval("325+85/5+1*6-5.5-9.8*68/2+0.5-9^2/3-105.0595") == "-122.259500", c);
-    //     test(primOpEval("2346^2+54-5.95+6.55-100*.555-10^0+2^-2") == "5503714.350000", c);
-    //     //this test should be -2932.284392 but because of the rounding of each number, it's off by .000001
-    //     //this can be solved during refactoring when we shift to a long double system and use custom precision
-    //     test(primOpEval("505/36.5+9^-2.5+90-435^1.32+9-5.598428") == "-2932.284393", c);
-        
+    //     test(primOpEval("0^65986258") == "00.000000000000000", c);
+    //     test(primOpEval("0^100") == "00.000000000000000", c);
+    //     test(primOpEval("-100+2*5-2^2^2+6-100*2.5*4/10+2500^.5") == "-150.000000000000000", c);
+    //     test(primOpEval("325+85/5+1*6-5.5-9.8*68/2+0.5-9^2/3-105.0595") == "-122.259500000000000", c);
+    //     //this test should only end in .35 but the way long doubles work makes the last 3 digits inaccurate
+    //     test(primOpEval("2346^2+54-5.95+6.55-100*.555-10^0+2^-2") == "5503714.350000000000364", c);
+    //     //this test should be -2932.284391915784257 but because of the rounding of each number, it's off by .000000000000001
+    //     test(primOpEval("505/36.5+9^-2.5+90-435^1.32+9-5.598428") == "-2932.284391915784258", c);
     // }
+
+    c = 0; 
+    cout << endl << "round" << endl;
+
+    { //grouping
+    test(round("3.000000000000") == "3", c);
+    test(round("35.89650000000000") == "35.8965", c);
+    test(round("10.000000000001") == "10.000000000001", c);
+    test(round("3.0006900000000") == "3.00069", c);
+    test(round("0.000000000000") == "0", c);
+    
+    
+    }
+
+
+
+
+    // c = 0; 
+    // cout << endl << "evaluate" << endl;
+
+    // { //grouping
+
+    //     //copy of some of the primOpEval problems
+    //     test(evaluate("1^0") == "1.000000000000000", c);    
+    //     test(evaluate("1^1") == "1.000000000000000", c);
+    //     test(evaluate("5^0") == "1.000000000000000", c);
+    //     test(evaluate("5^1") == "5.000000000000000", c);
+    //     test(evaluate("5*2^3") == "40.000000000000000", c);
+    //     test(evaluate("3^4*1^2-2^-1") == "80.500000000000000", c);
+    //     test(evaluate("10^2") == "100.000000000000000", c);
+    //     test(evaluate("123^1.5") == "1364.135990288358311", c);
+    //     test(evaluate("300^2") == "90000.000000000000000", c);
+    //     test(evaluate("1.5+2^3/-5^3") == "1.436000000000000", c);
+    //     test(evaluate("121^.5") == "11.000000000000000", c);
+    //     test(evaluate("27^.33333333333333333") == "3.000000000000000", c);
+    //     test(evaluate("100^.5") == "10.000000000000000", c);
+    //     test(evaluate("7^2") == "49.000000000000000", c);
+    //     test(evaluate(".5^2") == "0.250000000000000", c);
+    //     test(evaluate(".25^.5") == "0.500000000000000", c);
+    //     test(evaluate("2^-2") == "0.250000000000000", c);
+    //     test(evaluate("0^5") == "0.000000000000000", c);
+    //     //
+
+    // }
+
 
 
 
