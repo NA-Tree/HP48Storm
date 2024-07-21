@@ -454,7 +454,7 @@ string primOpEval(string input)
 string round(string input)
 {
     string evaluation = "";
-    string tempStr;
+    char tempChar;
     int tempConst;
     int i;
 
@@ -470,51 +470,59 @@ string round(string input)
             i--;
         }
 
-        //if the number ends in '.' then remove it as well
-        if(evaluation.at(i) == '.')
+        //checks to make sure the value was actually changed
+        if(i != evaluation.size() - 1)
         {
-            // remove all of the junk that was after the i
-            evaluation = evaluation.substr(0, i);
+            //if the number ends in '.' then remove it as well
+            if(evaluation.at(i) == '.')
+            {
+                // remove all of the junk that was after the i
+                evaluation = evaluation.substr(0, i);
+                return evaluation;
+
+            }
+            else
+            {
+                //remove all of the junk that was after the i
+                evaluation = evaluation.substr(0, i + 1);
+                return evaluation;
+            }
         }
         else
         {
-            //remove all of the junk that was after the i
-            evaluation = evaluation.substr(0, i + 1);
-        }
+            //rounding up if there are 9s for all but the last 2 digits
+            i = evaluation.size() - 1;
+            while(evaluation.at(i) == '9' && i > 0)
+            {
+                i--;
+            }
+            cout << i << '\t' << evaluation.size()-1-4<< endl;
+            cout << (i <= evaluation.size() - 1 - 4) << endl;
+            //if the 9s begin with a '.' add the next value
+            if(evaluation.at(i) == '.')
+            {
+                //skip over the '.'
+                i--;
+                //get the incremented value 
+                tempChar = evaluation.at(i);
+                tempConst = tempChar - 48 + 1;
 
-    
-        // //rounding up if there are 9s for all but the last 2 digits
-        // i = evaluation.size() - 1;
-        // while(evaluation.at(i) == '9' && i >= 0)
-        // {
-        //     i--;
-        // }
+                //increment the next value
+                evaluation = expressionInject(evaluation, i, evaluation.size() - 1, to_string(tempConst));
+                return evaluation;
+            }
+            //if there are at least 4 straight 9s, the next value increment
+            else if(i <= (evaluation.size() - 1 - 4))
+            {
+                //get the incremented value 
+                tempChar = evaluation.at(i);
+                tempConst = tempChar - 48 + 1;
+                //increment the next value
+                evaluation = expressionInject(evaluation, i, evaluation.size() - 1, to_string(tempConst));
+                return evaluation;
+            }    
 
-        // //get the incremented value 
-        // tempStr = evaluation.at(i);
-        // tempConst = stoi(tempStr) + 1;
-
-        // //if the 9s begin with a '.' add the next value
-        // if(evaluation.at(i - 1) == '.')
-        // {
-        //     //skip over the '.'
-        //     i--;
-
-
-        //     //increment the next value
-        //     evaluation = expressionInject(evaluation, i, i, to_string(tempConst));
-        // }
-        // //if there are at least 4 straight 9s, the next value increment
-        // else if(i <= evaluation.size() - 1 - 4)
-        // {
-        //     //increment the next value
-        //     evaluation = expressionInject(evaluation, i, i, to_string(tempConst));
-        // }
-
-
-
-
-
+        } 
 
     }
 
