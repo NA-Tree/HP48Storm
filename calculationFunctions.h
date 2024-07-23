@@ -633,7 +633,7 @@ string evaluate(string input)
                             tempStr = toString(logBase(E, injectionNum));
                             expressionInject(evaluation, currentBOE, currentEOE, tempStr);
                        }
-                       //make the process start over for long chains
+                       //make the process start over for chains
                        i = 0;
                 }
                 else
