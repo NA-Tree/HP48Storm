@@ -490,14 +490,16 @@ string round(string input)
         }
         else
         {
+
             //rounding up if there are 9s for all but the last 2 digits
             i = evaluation.size() - 1;
             while(evaluation.at(i) == '9' && i > 0)
             {
                 i--;
             }
-            cout << i << '\t' << evaluation.size()-1-4<< endl;
-            cout << (i <= evaluation.size() - 1 - 4) << endl;
+
+
+            bool fourNines = (i <= evaluation.size() - 1 - 4);            
             //if the 9s begin with a '.' add the next value
             if(evaluation.at(i) == '.')
             {
@@ -512,7 +514,7 @@ string round(string input)
                 return evaluation;
             }
             //if there are at least 4 straight 9s, the next value increment
-            else if(i <= (evaluation.size() - 1 - 4))
+            else if(fourNines)
             {
                 //get the incremented value 
                 tempChar = evaluation.at(i);
