@@ -238,6 +238,88 @@ bool isConst(string input)
 
 }
 
+// rounds a string constant
+string round(string input)
+{
+    string evaluation = "";
+    char tempChar;
+    int tempConst;
+    int i;
+
+    //only continue if the input is a constant
+    if(isConst(input))
+    {
+        //getting any misc. conversions out of the way by converting to and from a double
+        evaluation = input;
+
+        //finding the end of the trailing zeros
+        i = evaluation.size() - 1;
+        while(evaluation.at(i) == '0' && i > 0)
+        {
+            i--;
+        }
+
+        //checks to make sure the value was actually changed
+        if(i != evaluation.size() - 1)
+        {
+            //if the number ends in '.' then remove it as well
+            if(evaluation.at(i) == '.')
+            {
+                // remove all of the junk that was after the i
+                evaluation = evaluation.substr(0, i);
+                return evaluation;
+
+            }
+            else
+            {
+                //remove all of the junk that was after the i
+                evaluation = evaluation.substr(0, i + 1);
+                return evaluation;
+            }
+        }
+        else
+        {
+
+            //rounding up if there are 9s for all but the last 2 digits
+            i = evaluation.size() - 1;
+            while(evaluation.at(i) == '9' && i > 0)
+            {
+                i--;
+            }
+
+
+            //if the 9s begin with a '.' add the next value
+            bool fourNines = (i <= (int)(evaluation.size() - 1 - 12)); 
+            if(evaluation.at(i) == '.')
+            {
+                //skip over the '.'
+                i--;
+                //get the incremented value 
+                tempChar = evaluation.at(i);
+                tempConst = tempChar - 48 + 1;
+
+                //increment the next value
+                evaluation = expressionInject(evaluation, i, evaluation.size() - 1, to_string(tempConst));
+                return evaluation;
+            }
+            //if there are at least 12 straight 9s, the next value increment (unkown if we want to use this)
+            else if(fourNines)
+            {
+                //get the incremented value 
+                tempChar = evaluation.at(i);
+                tempConst = tempChar - 48 + 1;
+                //increment the next value
+                evaluation = expressionInject(evaluation, i, evaluation.size() - 1, to_string(tempConst));
+                return evaluation;
+            }    
+
+        } 
+
+    }
+
+    return evaluation;
+}
+
 //finds the position of the beginning character of the constant 
 //before the operator (which is located at operatorPlace) for string input
 int prevConstStrtLoc(string input, int operatorPlace)
@@ -351,10 +433,12 @@ string subToAddNeg(string input)
 //same as toString but with higher precision
 string toString(long double input)
 {
+        string returnString;
         ostringstream out;
         out.precision(DECPRECISION);
         out << fixed << input;
-        return move(out).str();
+        returnString = move(out).str();
+        return round(returnString);
 }
 
 //finds an addition operator and adds the constants on both sides of it
@@ -449,90 +533,6 @@ string primOpEval(string input)
 
     return evaluation;
 }
-
-// rounds a string constant
-string round(string input)
-{
-    string evaluation = "";
-    char tempChar;
-    int tempConst;
-    int i;
-
-    //only continue if the input is a constant
-    if(isConst(input))
-    {
-        evaluation = input;
-
-        //finding the end of the trailing zeros
-        i = evaluation.size() - 1;
-        while(evaluation.at(i) == '0' && i > 0)
-        {
-            i--;
-        }
-
-        //checks to make sure the value was actually changed
-        if(i != evaluation.size() - 1)
-        {
-            //if the number ends in '.' then remove it as well
-            if(evaluation.at(i) == '.')
-            {
-                // remove all of the junk that was after the i
-                evaluation = evaluation.substr(0, i);
-                return evaluation;
-
-            }
-            else
-            {
-                //remove all of the junk that was after the i
-                evaluation = evaluation.substr(0, i + 1);
-                return evaluation;
-            }
-        }
-        else
-        {
-
-            //rounding up if there are 9s for all but the last 2 digits
-            i = evaluation.size() - 1;
-            while(evaluation.at(i) == '9' && i > 0)
-            {
-                i--;
-            }
-
-
-            bool fourNines = (i <= evaluation.size() - 1 - 4);            
-            //if the 9s begin with a '.' add the next value
-            if(evaluation.at(i) == '.')
-            {
-                //skip over the '.'
-                i--;
-                //get the incremented value 
-                tempChar = evaluation.at(i);
-                tempConst = tempChar - 48 + 1;
-
-                //increment the next value
-                evaluation = expressionInject(evaluation, i, evaluation.size() - 1, to_string(tempConst));
-                return evaluation;
-            }
-            //if there are at least 4 straight 9s, the next value increment
-            else if(fourNines)
-            {
-                //get the incremented value 
-                tempChar = evaluation.at(i);
-                tempConst = tempChar - 48 + 1;
-                //increment the next value
-                evaluation = expressionInject(evaluation, i, evaluation.size() - 1, to_string(tempConst));
-                return evaluation;
-            }    
-
-        } 
-
-    }
-
-    return evaluation;
-}
-
-
-
 
 string evaluate(string input)
 {
