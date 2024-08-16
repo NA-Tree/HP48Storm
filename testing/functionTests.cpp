@@ -367,7 +367,6 @@ int main( int argc, char* argv[])
         test(evaluate("0^5") == "0", c);
         //testing simple recursion
         test(evaluate("2*(3-1)") == "4", c);
-
     }
 
 

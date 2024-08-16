@@ -536,10 +536,11 @@ string primOpEval(string input)
 
 string evaluate(string input)
 {
-    string evaluation = input;
-    int i;
+    string evaluation = removeWhiteSpace(input);
+    int i = 0;
     int currentBOE = 0;
     int currentEOE = 0;
+
     string tempStr;
     long double injectionNum;
 
@@ -549,7 +550,7 @@ string evaluate(string input)
        evaluation.at(0) == '(' && 
        evaluation.at(evaluation.size()-1) == ')'))
     {
-        return primOpEval(input);
+        return primOpEval(evaluation);
     }
     else
     {
@@ -559,91 +560,107 @@ string evaluate(string input)
             if(evaluation.at(i) == ')')
             {
                 //isolating the expression of the contents within parentheses
-                currentBOE = findPrevParenth(evaluation, i);
+                currentBOE = findPrevParenth(evaluation, i) + 1;
                 currentEOE = i;
-                tempStr = evaluation.substr(currentBOE + 1, currentEOE - 1);
-                //checking if it's a constant
-                if(isConst(tempStr))
-                {
-                    // if there is no letter before the parentheses, no need to check for a named function
-                    if(!isalpha(evaluation.at(currentBOE - 1)))
-                    {
-                    }
-                    // if there is a letter before the parentheses, proceed with evaluation
-                    else if(evaluation.substr(currentBOE - 4, currentBOE - 1)  
-                       == "ATAN")
-                       {
-                            injectionNum = stold(tempStr);
-                            tempStr = toString(atan(injectionNum));
-                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
-                       }
-                    else if(evaluation.substr(currentBOE - 4, currentBOE - 1)  
-                       == "ACOS")
-                       {
-                            injectionNum = stold(tempStr);
-                            tempStr = toString(acos(injectionNum));
-                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
-                       }
-                    else if(evaluation.substr(currentBOE - 4, currentBOE - 1)  
-                       == "ASIN")
-                       {
-                            injectionNum = stold(tempStr);
-                            tempStr = toString(asin(injectionNum));
-                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
-                       }
-                    else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
-                       == "TAN")
-                       {
-                            injectionNum = stold(tempStr);
-                            tempStr = toString(tan(injectionNum));
-                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
-                       }
-                    else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
-                       == "COS")
-                       {
-                            injectionNum = stold(tempStr);
-                            tempStr = toString(cos(injectionNum));
-                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
-                       }
-                    else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
-                       == "SIN")
-                       {
-                            injectionNum = stold(tempStr);
-                            tempStr = toString(sin(injectionNum));
-                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
-                       }
-                    else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
-                       == "EXP")
-                       {
-                            injectionNum = stold(tempStr);
-                            tempStr = toString(exp(injectionNum));
-                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
-                       }
-                    else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
-                       == "LOG")
-                       {
-                            injectionNum = stold(tempStr);
-                            tempStr = toString(logBase(10, injectionNum));
-                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
-                       }
-                    else if(evaluation.substr(currentBOE - 2, currentBOE - 1)  
-                       == "LN")
-                       {
-                            injectionNum = stold(tempStr);
-                            tempStr = toString(logBase(E, injectionNum));
-                            expressionInject(evaluation, currentBOE, currentEOE, tempStr);
-                       }
-                       //make the process start over for chains
-                       i = 0;
-                }
-                else
-                {
-                    //inject the parenteses with the evaluation of the internals
-                    expressionInject(evaluation, currentBOE, currentEOE, 
-                    evaluate(evaluation.substr(currentBOE, currentEOE)));
-                }
+
+                evaluation = expressionInject(evaluation, currentBOE-1, currentEOE, 
+                evaluate(evaluation.substr(currentBOE, currentEOE - currentBOE)));
+
+                // //checking if it's a constant
+                // tempStr = evaluation.substr(currentBOE, currentEOE - currentBOE - 1);
+
+                // if(isConst(tempStr))
+                // {
+
+                //     // if there is no letter before the parentheses, no need to check for a named function
+                //     if(!isalpha(evaluation.at(currentBOE - 1)))
+                //     {
+                //         evaluation = expressionInject(evaluation, currentBOE-1, currentEOE, 
+                //         evaluate(evaluation.substr(currentBOE, currentEOE - currentBOE-1)));
+                //     }
+                //     // if there is a letter before the parentheses, proceed with evaluation
+                //     else if(evaluation.substr(currentBOE - 4, currentBOE - 1)  
+                //        == "ATAN")
+                //         {
+                //             injectionNum = stold(evaluation.substr(currentBOE+1, currentEOE-1));
+                //             tempStr = toString(atan(injectionNum));
+                //             evaluation = expressionInject(evaluation, currentBOE, currentEOE, tempStr);
+                //         }
+                //     else if(evaluation.substr(currentBOE - 4, currentBOE - 1)  
+                //        == "ACOS")
+                //         {
+                //             injectionNum = stold(evaluation.substr(currentBOE+1, currentEOE-1));
+                //             tempStr = toString(acos(injectionNum));
+                //             evaluation = expressionInject(evaluation, currentBOE, currentEOE, tempStr);
+                //         }
+                //     else if(evaluation.substr(currentBOE - 4, currentBOE - 1)  
+                //        == "ASIN")
+                //         {
+                //             injectionNum = stold(evaluation.substr(currentBOE+1, currentEOE-1));
+                //             tempStr = toString(asin(injectionNum));
+                //             evaluation = expressionInject(evaluation, currentBOE, currentEOE, tempStr);
+                //         }
+                //     else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
+                //        == "TAN")
+                //         {
+                //             injectionNum = stold(evaluation.substr(currentBOE+1, currentEOE-1));
+                //             tempStr = toString(tan(injectionNum));
+                //             evaluation = expressionInject(evaluation, currentBOE, currentEOE, tempStr);
+                //         }
+                //     else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
+                //        == "COS")
+                //         {
+                //             injectionNum = stold(evaluation.substr(currentBOE+1, currentEOE-1));
+                //             tempStr = toString(cos(injectionNum));
+                //             evaluation = expressionInject(evaluation, currentBOE, currentEOE, tempStr);
+                //         }
+                //     else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
+                //        == "SIN")
+                //         {
+                //             injectionNum = stold(evaluation.substr(currentBOE+1, currentEOE-1));
+                //             tempStr = toString(sin(injectionNum));
+                //             evaluation = expressionInject(evaluation, currentBOE, currentEOE, tempStr);
+                //         }
+                //     else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
+                //        == "EXP")
+                //         {
+                //             injectionNum = stold(evaluation.substr(currentBOE+1, currentEOE-1));
+                //             tempStr = toString(exp(injectionNum));
+                //             evaluation = expressionInject(evaluation, currentBOE, currentEOE, tempStr);
+                //         }
+                //     else if(evaluation.substr(currentBOE - 3, currentBOE - 1)  
+                //        == "LOG")
+                //         {
+                //             injectionNum = stold(evaluation.substr(currentBOE+1, currentEOE-1));
+                //             tempStr = toString(logBase(10, injectionNum));
+                //             evaluation = expressionInject(evaluation, currentBOE, currentEOE, tempStr);
+                //         }
+                //     else if(evaluation.substr(currentBOE - 2, currentBOE - 1)  
+                //        == "LN")
+                //         {
+                //             injectionNum = stold(evaluation.substr(currentBOE+1, currentEOE-1));
+                //             tempStr = toString(logBase(E, injectionNum));
+                //             evaluation = expressionInject(evaluation, currentBOE, currentEOE, tempStr);
+                //         }
+                //     else
+                //         {
+                //             injectionNum = stold(evaluation.substr(currentBOE+1, currentEOE-1));
+                //             tempStr = toString(injectionNum);
+                //             evaluation = expressionInject(evaluation, currentBOE, currentEOE, tempStr);
+                //         }
+                //         //make the process start over for chains
+                //         i = 0;
+                // }
+                // else
+                // {
+                //     // inject the parenteses with the evaluation of the internals
+                //         evaluation = expressionInject(evaluation, currentBOE-1, currentEOE, 
+                //         evaluate(evaluation.substr(currentBOE, currentEOE - currentBOE-1)));
+                // }
+
             }
         }
+        evaluation = evaluate(evaluation);
     }
 
     //comb through the string looking for a function call
@@ -672,50 +689,45 @@ string evaluate(string input)
     return evaluation;
 }
 
+// string evaluate2(string input)
+// {
+//     string evaluation = removeWhiteSpace(input);
+//     int i = 0;
+//     int currentBOE = 0;
+//     int currentEOE = 0;
+
+//     string injectionString;
+//     int injectionInt;
 
 
+//     //if there are no parentheses in the expression
+//     if(countParentheses(evaluation) == 0 || 
+//       (countParentheses(evaluation) == 1 && 
+//        evaluation.at(0) == '(' && 
+//        evaluation.at(evaluation.size()-1) == ')'))
+//     {
+//         return primOpEval(input);
+//     }
+//     else
+//     {
+//         //find the lowest level of parentheses
+//         for(i = 0; i < evaluation.size(); i++)
+//         {
+//             if(evaluation.at(i) == ')')
+//             {
+//                 //isolating the expression of the contents within parentheses
+//                 currentBOE = findPrevParenth(evaluation, i)+1;
+//                 currentEOE = i;
 
+//                 evaluation = expressionInject(evaluation, currentBOE-1, currentEOE, 
+//                 evaluate2(evaluation.substr(currentBOE, currentEOE - currentBOE)));
+//             }
+//         }
+//         evaluation = evaluate2(evaluation);
+//     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//     return evaluation;
+// }
 
 
 
