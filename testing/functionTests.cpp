@@ -157,18 +157,18 @@ int main( int argc, char* argv[])
     // }
 
     // c = 0; 
-    // cout << endl << "prevConstEndLoc" << endl;
+    // cout << endl << "postConstEndLoc" << endl;
 
     // { //grouping
-    //     test(prevConstEndLoc("0123+567890", 4) == 10, c);
-    //     test(prevConstEndLoc("0123+567890", 6) == 10, c);
-    //     test(prevConstEndLoc("0123+.567890", 4) == 11, c);
-    //     test(prevConstEndLoc("0123+-567890", 4) == 11, c);
-    //     test(prevConstEndLoc("0123+-.567890", 4) == 12, c);
-    //     test(prevConstEndLoc("0123+5.67890", 4) == 11, c);
-    //     test(prevConstEndLoc("0123+-5.678+590", 4) == 10, c);
-    //     test(prevConstEndLoc("0123+5678+90", 4) == 8, c);
-    //     test(prevConstEndLoc("0123+-56.0+7890", 4) == 9, c);
+    //     test(postConstEndLoc("0123+567890", 4) == 10, c);
+    //     test(postConstEndLoc("0123+567890", 6) == 10, c);
+    //     test(postConstEndLoc("0123+.567890", 4) == 11, c);
+    //     test(postConstEndLoc("0123+-567890", 4) == 11, c);
+    //     test(postConstEndLoc("0123+-.567890", 4) == 12, c);
+    //     test(postConstEndLoc("0123+5.67890", 4) == 11, c);
+    //     test(postConstEndLoc("0123+-5.678+590", 4) == 10, c);
+    //     test(postConstEndLoc("0123+5678+90", 4) == 8, c);
+    //     test(postConstEndLoc("0123+-56.0+7890", 4) == 9, c);
     // }    
     
     // c = 0; 
@@ -202,20 +202,31 @@ int main( int argc, char* argv[])
     // }
 
     // c = 0; 
-    // cout << endl << "subToAddNeg" << endl;
+    // cout << endl << "negativeFix" << endl;
 
     // { //grouping
-    //     test(subToAddNeg("0123+567890") == "0123+567890", c);
-    //     test(subToAddNeg("0123-567890") == "0123+-567890", c);
-    //     test(subToAddNeg("0123+.567890") == "0123+.567890", c);
-    //     test(subToAddNeg("0123-.567890") == "0123+-.567890", c);
-    //     test(subToAddNeg("0123+-567890") == "0123+-567890", c);
-    //     test(subToAddNeg("+23+567890") == "23+567890", c);
-    //     test(subToAddNeg("0123+56-678-90") == "0123+56+-678+-90", c);
-    //     test(subToAddNeg("+.123+.567-.890") == ".123+.567+-.890", c);
-    //     test(subToAddNeg("01-2/3.58-45.6*78/90") == "01+-2/3.58+-45.6*78/90", c);
-    //     test(subToAddNeg("0123+567890+") == "0123+567890", c);
-    //     test(subToAddNeg("0123+567890-") == "0123+567890", c);
+    //     test(negativeFix("0123+567890") == "0123+567890", c);
+    //     test(negativeFix("0123-567890") == "0123+-567890", c);
+    //     test(negativeFix("0123+.567890") == "0123+.567890", c);
+    //     test(negativeFix("0123-.567890") == "0123+-.567890", c);
+    //     test(negativeFix("0123+-567890") == "0123+-567890", c);
+    //     test(negativeFix("+23+567890") == "23+567890", c);
+    //     test(negativeFix("0123+56-678-90") == "0123+56+-678+-90", c);
+    //     test(negativeFix("+.123+.567-.890") == ".123+.567+-.890", c);
+    //     test(negativeFix("01-2/3.58-45.6*78/90") == "01+-2/3.58+-45.6*78/90", c);
+    //     test(negativeFix("0123+567890+") == "0123+567890", c);
+    //     test(negativeFix("0123+567890-") == "0123+567890", c);
+    //     cout << endl;
+
+    //     test(negativeFix("") == "", c);
+    //     test(negativeFix("--8") == "8", c);
+    //     test(negativeFix("1--8") == "1+8", c);
+    //     test(negativeFix("2*--8") == "2*8", c);
+    //     test(negativeFix("--2*8") == "2*8", c);
+    //     test(negativeFix("(--2)") == "(2)", c);
+    //     test(negativeFix("3+--18*6") == "3+18*6", c);
+    //     test(negativeFix("3--18*6") == "3+18*6", c);
+
     // }
 
     // c = 0; 
@@ -341,6 +352,7 @@ int main( int argc, char* argv[])
     //     test(primOpEval("505/36.5+9^-2.5+90-435^1.32+9-5.598428") == "-2932.284391915784258", c);
     // }
 
+
     c = 0; 
     cout << endl << "evaluate" << endl;
 
@@ -367,6 +379,24 @@ int main( int argc, char* argv[])
         test(evaluate("0^5") == "0", c);
         //testing simple recursion
         test(evaluate("2*(3-1)") == "4", c);
+        test(evaluate("1+(6)+7*(5+5-1)*-2/2+(4*6)") == "-32", c);
+        test(evaluate("(3+5*(3+5*(3+5)))+9*(5-3+(2*1))") == "254", c);
+        test(evaluate("3-(9*-2)*6") == "111", c);
+        test(evaluate("(123+159)/2 + 5+9*(1/9)") == "147", c);
+        test(evaluate("2^2^3") == "64", c);
+        // test(evaluate("") == "", c);
+        // test(evaluate("") == "", c);
+        // test(evaluate("") == "", c);
+        // test(evaluate("") == "", c);
+        // test(evaluate("") == "", c);
+        // test(evaluate("") == "", c);
+        // test(evaluate("") == "", c);
+        // test(evaluate("") == "", c);
+
+
+
+
+
     }
 
 

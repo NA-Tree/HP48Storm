@@ -358,7 +358,7 @@ long double constantBefore(string input, int operatorPlace)
 
 //finds the position of the end character of the constant 
 //after the operator (which is located at operatorPlace) for string input
-int prevConstEndLoc(string input, int operatorPlace)
+int postConstEndLoc(string input, int operatorPlace)
 {
     string number;
     int i;
@@ -389,7 +389,7 @@ int prevConstEndLoc(string input, int operatorPlace)
 long double constantAfter(string input, int operatorPlace)
 {
     //isolates the constant in string form
-    string substr = input.substr(operatorPlace + 1, prevConstEndLoc(input, operatorPlace));
+    string substr = input.substr(operatorPlace + 1, postConstEndLoc(input, operatorPlace));
     //appends an end byte to ensure saftey
     substr = substr.append(1u, '\0');
     //returns the constant after it's converted to a long double
@@ -397,35 +397,65 @@ long double constantAfter(string input, int operatorPlace)
 }
 
 //converts all - operators into +- (the addition of a negative)
-string subToAddNeg(string input)
+string negativeFix(string input)
 {
     string evaluation = input;
     int i = 0;
-    
-    //checks if there is a random '+' with nothing on it's left side (and corrects it)
-    if(evaluation.at(0) == '+')
+    if(evaluation.size() > 0)
     {
-        evaluation = expressionInject(evaluation, 0, 0, "");
-    }
-
-    //checks if there is a random '+' or '-' with nothing on it's right side (and corrects it)
-    if(evaluation.at(evaluation.size()-1) == '+' || evaluation.at(evaluation.size()-1) == '-')
-    {
-        evaluation = expressionInject(evaluation, evaluation.size()-1, evaluation.size()-1, "");
-    }
-
-    //looks at each character and looks to see if it's a minus operator
-    //with characters indicative of constants on both sides
-    for(i = 1; i < evaluation.size() - 1; i++)
-    {
-        if(isdigit(evaluation.at(i - 1)) && evaluation.at(i) == '-' && (isdigit(evaluation.at(i+1)) || 
-                                                                        evaluation.at(i+1) == '.'))
+        //checks if there is a random '+' with nothing on it's left side (and corrects it)
+        if(evaluation.at(0) == '+')
         {
-            // replaces the '-' character with "+-"
-            evaluation = expressionInject(evaluation, i, i, "+-");
+            evaluation = expressionInject(evaluation, 0, 0, "");
+        }
+
+        //checks if there is a random '+' or '-' with nothing on it's right side (and corrects it)
+        if(evaluation.at(evaluation.size()-1) == '+' || evaluation.at(evaluation.size()-1) == '-')
+        {
+            evaluation = expressionInject(evaluation, evaluation.size()-1, evaluation.size()-1, "");
+        }
+
+
+        //checks for a double negative at the beginning of the expression
+        if(evaluation.at(0) == '-' && evaluation.at(1) == '-')
+        {
+            evaluation = expressionInject(evaluation, 0, 1, "");
+        }
+
+        //looks at each character and looks to see if it's a minus operator
+        //with characters indicative of constants on both sides
+        for(i = 1; i < evaluation.size() - 1; i++)
+        {
+            // confirms that there is a number behind of the subtract and 
+            if(evaluation.at(i) == '-' && (isdigit(evaluation.at(i+1)) || 
+                                           evaluation.at(i+1) == '.'   || 
+                                           evaluation.at(i+1) == '-'   ))
+            {
+                // if there is a number on both sides of the subtract, convert subs to negative additions
+                if(isdigit(evaluation.at(i - 1)) && isdigit(evaluation.at(i + 1)) || evaluation.at(i+1) == '.')
+                {
+                    // replaces the '-' character with "+-"
+                    evaluation = expressionInject(evaluation, i, i, "+-");
+                    //skipping over the new value we just added
+                    i++;
+                }
+                // otherwise check for double negative on the right side and correct it
+                else if(evaluation.at(i + 1) == '-')
+                {
+                    //check for operator on the left side and replace the double negative depending
+                    if(isdigit(evaluation.at(i - 1)))
+                    {
+                        evaluation = expressionInject(evaluation, i, i + 1, "+");
+                    }
+                    else
+                    {
+                        evaluation = expressionInject(evaluation, i, i + 1, "");
+                        //backing up to recheck the value we took away                            
+                    }
+                }
+            }
         }
     }
-
     //returns the original expressions with the corrections made
     return evaluation;
 }
@@ -448,7 +478,7 @@ string addEval(string input)
     int i;
 
     //makes all of the subract operators addition of negative numbers
-    evaluation = subToAddNeg(input);
+    evaluation = negativeFix(input);
 
     for(i = 0; i < evaluation.size(); i++)
     {
@@ -456,7 +486,7 @@ string addEval(string input)
         {
             //converts the expression to it's constants, adds them, and replaces 
             //the two numbers and the operator with the result
-            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i), prevConstEndLoc(evaluation, i), 
+            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i), postConstEndLoc(evaluation, i), 
             toString(sum(constantBefore(evaluation, i), constantAfter(evaluation, i))));
             //after evaluation, sets i to 0 to start at the beginning so chained expressions can be handled
             i = 0;
@@ -471,19 +501,19 @@ string multAndDivEval(string input)
     string evaluation = input;
     int i;
 
-    evaluation = subToAddNeg(input);
+    evaluation = negativeFix(input);
 
     for(i = 0; i < evaluation.size(); i++)
     {
         if(evaluation.at(i) == '*')
         {
-            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i), prevConstEndLoc(evaluation, i), 
+            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i), postConstEndLoc(evaluation, i), 
             toString(product(constantBefore(evaluation, i), constantAfter(evaluation, i))));
             i = 0;
         }
         else if(evaluation.at(i) == '/')
         {
-            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i), prevConstEndLoc(evaluation, i), 
+            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i), postConstEndLoc(evaluation, i), 
             toString(division(constantBefore(evaluation, i), constantAfter(evaluation, i))));
             i = 0;
         }
@@ -497,7 +527,7 @@ string powerEval(string input)
     string evaluation = input;
     int i;
 
-    evaluation = subToAddNeg(input);
+    evaluation = negativeFix(input);
 
     for(i = 0; i < evaluation.size(); i++)
     {
@@ -505,12 +535,12 @@ string powerEval(string input)
         {
             if(constantBefore(evaluation, i) > 0)
             {
-            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i), prevConstEndLoc(evaluation, i), 
+            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i), postConstEndLoc(evaluation, i), 
             toString(pow(constantBefore(evaluation, i), constantAfter(evaluation, i))));
             }
             else 
             {
-            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i)+1, prevConstEndLoc(evaluation, i), 
+            evaluation = expressionInject(evaluation, prevConstStrtLoc(evaluation, i)+1, postConstEndLoc(evaluation, i), 
             toString(pow(constantBefore(evaluation, i)*(-1), constantAfter(evaluation, i))));
             }
 
